@@ -1,5 +1,3 @@
-Code.compile_file("examples_generator.exs")
-
 defmodule Ecto.ERD.MixProject do
   use Mix.Project
   @source_url "https://github.com/fuelen/ecto_erd/"
@@ -25,6 +23,7 @@ defmodule Ecto.ERD.MixProject do
   end
 
   defp docs do
+    ensure_examples_generator()
     [
       extras:
         Enum.map(ExamplesGenerator.projects(), fn project ->
@@ -53,6 +52,7 @@ defmodule Ecto.ERD.MixProject do
   end
 
   defp generate_examples(_) do
+    ensure_examples_generator()
     ExamplesGenerator.run(Path.join([@source_url, "blob", "v#{@version}"]))
   end
 
@@ -62,5 +62,9 @@ defmodule Ecto.ERD.MixProject do
       {:html_entities, "~> 0.5"},
       {:ecto, "~> 3.3"}
     ]
+  end
+
+  def ensure_examples_generator do
+    Code.require_file("examples_generator.exs")
   end
 end
